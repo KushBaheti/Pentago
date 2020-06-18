@@ -21,8 +21,6 @@ app.use(express.static(publicDirPath))
 
 io.on("connection", (socket) => {
     socket.on("join", ({ isOnline, username, room }, callback) => {
-        console.log("FROM SRVR:",isOnline, username, room)
-
         const { error, user, canBegin } = addUser({ id: socket.id, isOnline, username, room })
         
         if (error) {

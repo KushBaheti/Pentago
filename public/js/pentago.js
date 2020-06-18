@@ -19,29 +19,65 @@ socket.on("message", (message) => {
     console.log(message)
 })
 
-// Update members currently in room
-// let nameOne = document.querySelector(".n1") 
-// let nameTwo = document.querySelector(".n2")
-// let winOne = document.querySelector(".w1")
-// let winTwo = document.querySelector(".w2")
-// socket.on("roomData", ({ room, users }) => {
-//     console.log(users)
-//     users.forEach((user) => {
-//         if (user.color === "white") {
-//             nameOne.innerHTML = user.username
-//             winOne.innerHTML = user.wins
-//         } else {
-//             nameTwo.innerHTML = user.username
-//             winTwo.innerHTML = user.wins
-//         }
-//     })
-// })
+// Update scoreboard
+let nameOne = document.querySelector(".p1") 
+let nameTwo = document.querySelector(".p2")
+let scoreOne = document.querySelector(".s-p1")
+let scoreTwo = document.querySelector(".s-p2")
+let playerOne = undefined
+let playerTwo = undefined
+socket.on("roomData", ({ room, users }) => {
+    console.log(room, users)
+
+    if (users[0].color === "white") {
+        // this is player 1
+        playerOne = users[0]
+        playerTwo = users[1] || undefined
+    } else {
+        // this is player 2
+        playerOne = users[1] || undefined
+        playerTwo = users[0]
+    }
+
+    nameOne.innerHTML = playerOne.username
+    scoreOne.innerHTML = playerOne.wins
+
+    if (playerTwo) {
+        nameTwo.innerHTML = playerTwo.username
+        scoreTwo.innerHTML = playerTwo.wins
+    }
+})
+
+// Update heading with each turn
+let isFirstTime = true
+const setHeading = () => {
+    if (isFirstTime) {
+        if (playerOne.color === color) {
+            heading.innerHTML = playerOne.username + "\'s turn!"
+        } else {
+            heading.innerHTML = playerTwo.username + "\'s turn!"
+        }
+        isFirstTime = false
+    } else {
+        if (playerOne.color === color) {
+            heading.innerHTML = playerTwo.username + "\'s turn!"
+        } else {
+            heading.innerHTML = playerOne.username + "\'s turn!"
+        }
+    }
+}
 
 // Specify who makes the first move
 let isMyTurn = undefined
 socket.on("chance", (chance) => {
     isMyTurn = chance
+    setHeading()
 })
+
+const getWinnerFromColor = (color) => {
+    winner = playerOne.color === color ? playerOne.username.toUpperCase() : playerTwo.username.toUpperCase()
+    return winner
+}
 
 // Handle marble placement
 const emptySpaces = [...document.querySelectorAll("circle")]
@@ -58,8 +94,6 @@ let degreesOfRotation = [0, 0, 0, 0]
 const heading = document.querySelector("#game-heading")
 let color = body.style.background || "white"
 let nextColor = body.style.background || "white"
-let backgroundOne = document.querySelector("#flex-container")
-let backgroundTwo = document.querySelector("#game-section")
 
 // Store current state of game
 let isEmptySpacesActive = true // Activate/deactivate placement of marble
@@ -139,7 +173,8 @@ socket.on("placingMarble", (spaceID) => {
         // Check if player has won
         winningColor = isGameOver()
         if (winningColor === color) {
-            heading.innerHTML = color.toUpperCase().concat(" WINS!")
+            let winner = getWinnerFromColor(color)
+            heading.innerHTML = winner.concat(" WINS!")
             newGame.disabled = false
         } else {
             space.style.pointerEvents = "none"
@@ -237,13 +272,15 @@ socket.on("rotating", ({ rotationValue, quadIndex }) => {
     winningColor = isGameOver()
     if (winningColor === color) {
         setTimeout(() => {
-            heading.innerHTML = color.toUpperCase().concat(" WINS!")
+            let winner = getWinnerFromColor(color)
+            heading.innerHTML = winner.concat(" WINS!")
             newGame.disabled = false
         }, 400)
     } else if (winningColor === nextColor) {
         setTimeout(() => {
-            heading.innerHTML = nextColor.toUpperCase().concat(" WINS!")
             changeBackground()
+            let winner = getWinnerFromColor(nextColor)
+            heading.innerHTML = winner.concat(" WINS!")
             newGame.disabled = false
         }, 400)
     } else {
@@ -257,9 +294,8 @@ socket.on("rotating", ({ rotationValue, quadIndex }) => {
 // Change background, heading and arrows
 const changeBackground = () => {
     body.style.background = nextColor
-    // backgroundOne.style.background = nextColor
-    // backgroundTwo.style.background = nextColor
     heading.style.color = color
+    setHeading()
     arrows.forEach((arrow) => {
         if (!arrow.style.filter) {
             arrow.style.filter = "invert(1)"

@@ -14,12 +14,12 @@ html, body * {
 
 .container {
   width: 100%;
-  padding-top: 60px;
-  padding-bottom: 100px;
+  /* padding-top: 20px; */
+  /* padding-bottom: 100px; */
 }
 
 .frame {
-  height: 575px;
+  height: 540px;
   width: 430px;
   background: linear-gradient(rgba(35,43,85,0.75), rgba(35,43,85,0.95));
   background: linear-gradient(#ac3939, #993333);
@@ -47,14 +47,12 @@ html, body * {
 .author {
   font-size: 10px;
   margin-top:auto;
-    margin-bottom:auto;
-    text-align:center;
+  margin-bottom:auto;
+  text-align:center;
 }
 
 h3 {
   margin: 15px auto 7px;
-  /* width: 50px; */
-  /* margin: auto; */
 }
 
 ul {
@@ -65,9 +63,19 @@ li {
   padding-bottom: 3px;
 }
 
+.updates {
+  margin: 20px;
+  color: rgba(0,0,0,.7);
+  text-align:center;
+}
+
+.updates p {
+  margin: 5px;
+}
+
 .form-signin {
   width: 430px;
-  height: 335px;
+  height: 305px;
 	font-size: 16px;
 	font-weight: 300;
   padding-left: 37px;

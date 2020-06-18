@@ -16,6 +16,8 @@ checkbox.addEventListener('click', () => {
         // Checkbox is not checked: username and room NOT required
         console.log("unchecked")
         checkbox.value = "false"
+        username.value = ""
+        room.value = ""
         username.removeAttribute("required")
         room.removeAttribute("required")
         username.setAttribute("disabled", "true")

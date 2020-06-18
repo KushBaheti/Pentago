@@ -165,9 +165,6 @@ svg {
     justify-content: center;
     outline: none;
     box-shadow: 2px 3px 5px 0px rgba(0,0,0,0.25);
-    /* border: 1px solid black; */
-    /* background-color: #ffa7a7; */
-    /* color: black; */
     height: 40px;
     width: 160px;
     margin: 20px auto;
@@ -176,14 +173,18 @@ svg {
     color: #ffffff; 
     border: 1px solid #993333;
     background: linear-gradient(-60deg, #993333 47%, #ac3939 53%);
-}
-
-#new-game:hover {
-    background-color: #ee6f6f;
+    cursor: pointer;
 }
 
 #new-game:active {
-    transform: translateY(1px);
+    transform: translateY(1.5px);
+}
+
+#new-game:disabled {
+    background: linear-gradient(-60deg, rgba(153, 51, 51, 0.5) 47%, rgba(172, 57, 57, 0.5) 53%);
+    border: 1px solid rgba(153, 51, 51, 0.3);
+    color: rgba(255,255,255,.5);
+    cursor: context-menu;
 }
 
 /* GRID LAYOUT */
