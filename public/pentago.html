@@ -5,88 +5,116 @@
     <meta charset="UTF-8">
     <title>Pentago</title>
     <link rel="icon" type="image/png" href="./img/jigsaw.png">
+    <!-- <meta name="viewport" content="width=device-width, initial-scale=1.0"> -->
     <link rel="stylesheet" href="./css/pentago.css">
 </head>
 
 <body>
 
-    <h1 id="heading" align="center">Pentago!</h1>
+    <div class="container">
 
-    <div id="container" style="position:relative; width: 480px; height: 480px; margin: auto;">
-        <img class="rotate-arrow right x25" src="./img/right-arrow.PNG" width="30" height="30" ></svg>
-        <img class="rotate-arrow left y25" src="./img/down-arrow.PNG" width="30" height="30" />
-        <img class="rotate-arrow left x75" src="./img/left-arrow.PNG" width="30" height="30" />
-        <img class="rotate-arrow right x100 y25" src="./img/down-arrow.PNG" width="30" height="30" />
-        <img class="rotate-arrow right y75" src="./img/up-arrow.PNG" width="30" height="30" />
-        <img class="rotate-arrow left x25 y100" src="./img/right-arrow.PNG" width="30" height="30" />
-        <img class="rotate-arrow left x100 y75" src="./img/up-arrow.PNG" width="30" height="30" />
-        <img class="rotate-arrow right x75 y100" src="./img/left-arrow.PNG" width="30" height="30" />
-        
-        <div id="board" style="width: 405px; margin: auto;">
-            <svg id="top-left" width="200" height="200">
-                <rect width="200" height="200" rx="20" ry="20" fill="darkred" />
-                <circle id="0-0-0" cx="40" cy="40" r="20" fill="crimson" />
-                <circle id="0-0-1" cx="100" cy="40" r="20" fill="crimson" />
-                <circle id="0-0-2" cx="160" cy="40" r="20" fill="crimson" />
-
-                <circle id="0-1-0" cx="40" cy="100" r="20" fill="crimson" />
-                <circle id="0-1-1" cx="100" cy="100" r="20" fill="crimson" />
-                <circle id="0-1-2" cx="160" cy="100" r="20" fill="crimson" />
-
-                <circle id="0-2-0" cx="40" cy="160" r="20" fill="crimson" />
-                <circle id="0-2-1" cx="100" cy="160" r="20" fill="crimson" />
-                <circle id="0-2-2" cx="160" cy="160" r="20" fill="crimson" />
-            </svg>
+        <div class="game-section">
+            <h2 id="game-heading" align="center">Pentago!</h2>
+            <div id="board-container">
+                <img class="rotate-arrow right x25" src="./img/right-arrow.PNG" width="30" height="30" >
+                <img class="rotate-arrow left y25" src="./img/down-arrow.PNG" width="30" height="30" />
+                <img class="rotate-arrow left x75" src="./img/left-arrow.PNG" width="30" height="30" />
+                <img class="rotate-arrow right x100 y25" src="./img/down-arrow.PNG" width="30" height="30" />
+                <img class="rotate-arrow right y75" src="./img/up-arrow.PNG" width="30" height="30" />
+                <img class="rotate-arrow left x25 y100" src="./img/right-arrow.PNG" width="30" height="30" />
+                <img class="rotate-arrow left x100 y75" src="./img/up-arrow.PNG" width="30" height="30" />
+                <img class="rotate-arrow right x75 y100" src="./img/left-arrow.PNG" width="30" height="30" />
             
-            <svg id="top-right" width="200" height="200">
-                <rect width="200" height="200" rx="20" ry="20" fill="darkred" />
-                <circle id="1-0-0" cx="40" cy="40" r="20" fill="crimson" />
-                <circle id="1-0-1" cx="100" cy="40" r="20" fill="crimson" />
-                <circle id="1-0-2" cx="160" cy="40" r="20" fill="crimson" />
+                <div id="board" style="width: 85%; height: 85%; margin: auto;">
+                    <svg id="top-left" width="49%" height="49%">
+                        <rect width="100%" height="100%" rx="20" ry="20" fill="darkred" />
+                        <circle id="0-0-0" cx="20%" cy="20%" r="10%" fill="crimson" />
+                        <circle id="0-0-1" cx="50%" cy="20%" r="10%" fill="crimson" />
+                        <circle id="0-0-2" cx="80%" cy="20%" r="10%" fill="crimson" />
 
-                <circle id="1-1-0" cx="40" cy="100" r="20" fill="crimson" />
-                <circle id="1-1-1" cx="100" cy="100" r="20" fill="crimson" />
-                <circle id="1-1-2" cx="160" cy="100" r="20" fill="crimson" />
+                        <circle id="0-1-0" cx="20%" cy="50%" r="10%" fill="crimson" />
+                        <circle id="0-1-1" cx="50%" cy="50%" r="10%" fill="crimson" />
+                        <circle id="0-1-2" cx="80%" cy="50%" r="10%" fill="crimson" />
 
-                <circle id="1-2-0" cx="40" cy="160" r="20" fill="crimson" />
-                <circle id="1-2-1" cx="100" cy="160" r="20" fill="crimson" />
-                <circle id="1-2-2" cx="160" cy="160" r="20" fill="crimson" />
-            </svg>
-            
-            <svg id="bottom-left" width="200" height="200">
-                <rect width="200" height="200" rx="20" ry="20" fill="darkred" />
-                <circle id="2-0-0" cx="40" cy="40" r="20" fill="crimson" />
-                <circle id="2-0-1" cx="100" cy="40" r="20" fill="crimson" />
-                <circle id="2-0-2" cx="160" cy="40" r="20" fill="crimson" />
+                        <circle id="0-2-0" cx="20%" cy="80%" r="10%" fill="crimson" />
+                        <circle id="0-2-1" cx="50%" cy="80%" r="10%" fill="crimson" />
+                        <circle id="0-2-2" cx="80%" cy="80%" r="10%" fill="crimson" />
+                    </svg>
+                    
+                    <svg id="top-right" width="49%" height="49%">
+                        <rect width="100%" height="100%" rx="20" ry="20" fill="darkred" />
+                        <circle id="1-0-0" cx="20%" cy="20%" r="10%" fill="crimson" />
+                        <circle id="1-0-1" cx="50%" cy="20%" r="10%" fill="crimson" />
+                        <circle id="1-0-2" cx="80%" cy="20%" r="10%" fill="crimson" />
 
-                <circle id="2-1-0" cx="40" cy="100" r="20" fill="crimson" />
-                <circle id="2-1-1" cx="100" cy="100" r="20" fill="crimson" />
-                <circle id="2-1-2" cx="160" cy="100" r="20" fill="crimson" />
+                        <circle id="1-1-0" cx="20%" cy="50%" r="10%" fill="crimson" />
+                        <circle id="1-1-1" cx="50%" cy="50%" r="10%" fill="crimson" />
+                        <circle id="1-1-2" cx="80%" cy="50%" r="10%" fill="crimson" />
 
-                <circle id="2-2-0" cx="40" cy="160" r="20" fill="crimson" />
-                <circle id="2-2-1" cx="100" cy="160" r="20" fill="crimson" />
-                <circle id="2-2-2" cx="160" cy="160" r="20" fill="crimson" />
-            </svg>
-            
-            <svg id="bottom-right" width="200" height="200">s
-                <rect width="200" height="200" rx="20" ry="20" fill="darkred" />
-                <circle id="3-0-0" cx="40" cy="40" r="20" fill="crimson" />
-                <circle id="3-0-1" cx="100" cy="40" r="20" fill="crimson" />
-                <circle id="3-0-2" cx="160" cy="40" r="20" fill="crimson" />
+                        <circle id="1-2-0" cx="20%" cy="80%" r="10%" fill="crimson" />
+                        <circle id="1-2-1" cx="50%" cy="80%" r="10%" fill="crimson" />
+                        <circle id="1-2-2" cx="80%" cy="80%" r="10%" fill="crimson" />
+                    </svg>
+                    
+                    <svg id="bottom-left" width="49%" height="49%">
+                        <rect width="100%" height="100%" rx="20" ry="20" fill="darkred" />
+                        <circle id="2-0-0" cx="20%" cy="20%" r="10%" fill="crimson" />
+                        <circle id="2-0-1" cx="50%" cy="20%" r="10%" fill="crimson" />
+                        <circle id="2-0-2" cx="80%" cy="20%" r="10%" fill="crimson" />
 
-                <circle id="3-1-0" cx="40" cy="100" r="20" fill="crimson" />
-                <circle id="3-1-1" cx="100" cy="100" r="20" fill="crimson" />
-                <circle id="3-1-2" cx="160" cy="100" r="20" fill="crimson" />
+                        <circle id="2-1-0" cx="20%" cy="50%" r="10%" fill="crimson" />
+                        <circle id="2-1-1" cx="50%" cy="50%" r="10%" fill="crimson" />
+                        <circle id="2-1-2" cx="80%" cy="50%" r="10%" fill="crimson" />
 
-                <circle id="3-2-0" cx="40" cy="160" r="20" fill="crimson" />
-                <circle id="3-2-1" cx="100" cy="160" r="20" fill="crimson" />
-                <circle id="3-2-2" cx="160" cy="160" r="20" fill="crimson" />
-            </svg>
+                        <circle id="2-2-0" cx="20%" cy="80%" r="10%" fill="crimson" />
+                        <circle id="2-2-1" cx="50%" cy="80%" r="10%" fill="crimson" />
+                        <circle id="2-2-2" cx="80%" cy="80%" r="10%" fill="crimson" />
+                    </svg>
+                    
+                    <svg id="bottom-right" width="49%" height="49%">s
+                        <rect width="100%" height="100%" rx="20" ry="20" fill="darkred" />
+                        <circle id="3-0-0" cx="20%" cy="20%" r="10%" fill="crimson" />
+                        <circle id="3-0-1" cx="50%" cy="20%" r="10%" fill="crimson" />
+                        <circle id="3-0-2" cx="80%" cy="20%" r="10%" fill="crimson" />
+
+                        <circle id="3-1-0" cx="20%" cy="50%" r="10%" fill="crimson" />
+                        <circle id="3-1-1" cx="50%" cy="50%" r="10%" fill="crimson" />
+                        <circle id="3-1-2" cx="80%" cy="50%" r="10%" fill="crimson" />
+
+                        <circle id="3-2-0" cx="20%" cy="80%" r="10%" fill="crimson" />
+                        <circle id="3-2-1" cx="50%" cy="80%" r="10%" fill="crimson" />
+                        <circle id="3-2-2" cx="80%" cy="80%" r="10%" fill="crimson" />
+                    </svg>
+                </div>
+            </div>
+            <br>
         </div>
+
+        <div class="info-section">
+            <div class="scoreboard">
+                <div class="player">
+                    <div class="color c-p1">P1</div>
+                    <div class="name p1">Player1</div>
+                    <div class="score s-p1">01</div>
+                </div>
+                <div class="divider"></div>
+                <div class="player">
+                    <div class="color c-p2">P2</div>
+                    <div class="name p2">Player2</div>
+                    <div class="score s-p2">88</div>
+                </div>
+            </div>
+            
+            <div class="button-container">
+                <button id="new-game">Play Again!</button>
+            </div>
+        </div>
+
     </div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.6.0/qs.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <!-- <script type="text/javascript" src="./js/socket.js"></script> -->
     <script type="text/javascript" src="./js/pentago.js"></script>
 
 </body>

@@ -19,6 +19,7 @@
   "homepage": "https://github.com/KushBaheti/Pentago#readme",
   "dependencies": {
     "express": "^4.17.1",
+    "sass": "^1.26.8",
     "socket.io": "^2.3.0"
   },
   "devDependencies": {

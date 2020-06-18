@@ -1,9 +1,13 @@
 // Client side socket.io
 const socket = io()
 
-// Get new clients username, room and join
-const { username, room } = Qs.parse(location.search, { ignoreQueryPrefix: true })
-socket.emit("join", { username, room }, (error) => {
+// const socket = require('./socket')
+
+// Get new clients game mode, username, room and join
+const { gameMode = undefined, username = undefined, room = undefined } = Qs.parse(location.search, { ignoreQueryPrefix: true })
+const isOnline = gameMode === "true" ? true : false
+console.log(gameMode, username, room)
+socket.emit("join", { isOnline, username, room }, (error) => {
     if (error) {
         alert(error)
         location.href = "/"
@@ -16,12 +20,25 @@ socket.on("message", (message) => {
 })
 
 // Update members currently in room
-socket.on("roomData", ({ room, users }) => {
-    console.log(room)
-    console.log(users)
-})
+// let nameOne = document.querySelector(".n1") 
+// let nameTwo = document.querySelector(".n2")
+// let winOne = document.querySelector(".w1")
+// let winTwo = document.querySelector(".w2")
+// socket.on("roomData", ({ room, users }) => {
+//     console.log(users)
+//     users.forEach((user) => {
+//         if (user.color === "white") {
+//             nameOne.innerHTML = user.username
+//             winOne.innerHTML = user.wins
+//         } else {
+//             nameTwo.innerHTML = user.username
+//             winTwo.innerHTML = user.wins
+//         }
+//     })
+// })
 
-var isMyTurn = undefined
+// Specify who makes the first move
+let isMyTurn = undefined
 socket.on("chance", (chance) => {
     isMyTurn = chance
 })
@@ -38,27 +55,37 @@ const quads = document.querySelectorAll("svg")
 let degreesOfRotation = [0, 0, 0, 0]
 
 // Change background color and header
-const heading = document.querySelector("#heading")
+const heading = document.querySelector("#game-heading")
 let color = body.style.background || "white"
 let nextColor = body.style.background || "white"
+let backgroundOne = document.querySelector("#flex-container")
+let backgroundTwo = document.querySelector("#game-section")
 
 // Store current state of game
-let isEmptySpacesActive = false // Activate/deactivate placement of marble
+let isEmptySpacesActive = true // Activate/deactivate placement of marble
 let isArrowsActive = false // Activate/deactivate rotation of quad
 let numOfPlacedMarbles = 0
 let quadrant = 0, row = 0, column = 0
 
-board = [
-    [null, null, null, null, null, null],
-    [null, null, null, null, null, null],
-    [null, null, null, null, null, null],
-    [null, null, null, null, null, null],
-    [null, null, null, null, null, null],
-    [null, null, null, null, null, null]
-]
+// Start a new game
+let winningColor = ''
+let newGame = document.getElementById('new-game')
+
+// Behind the scenes Pentago board
+const getEmptyBoard = () => {
+    return [
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null],
+        [null, null, null, null, null, null]
+    ]
+}
+
+let board = getEmptyBoard()
 
 // Listen for marble placement
-isEmptySpacesActive = true
 emptySpaces.forEach((space) => {
     space.addEventListener("click", function containerFunc() {
         if (isMyTurn && isEmptySpacesActive) {
@@ -66,7 +93,6 @@ emptySpaces.forEach((space) => {
         }
     })
 })
-
 
 // Listen for rotation
 rotateRightArrows.forEach((arrow) => {
@@ -90,12 +116,12 @@ rotateLeftArrows.forEach((arrow) => {
     })
 })
 
-
 // Fill in emptySpace selected by player with appropriate color
 // Update the logic board to reflect this change
 socket.on("placingMarble", (spaceID) => {
     // if (isEmptySpacesActive) {
         const space = document.getElementById(`${spaceID}`)
+        
         // Fill
         color = body.style.background || "white"
         nextColor = color === "white" ? "black" : "white"
@@ -111,9 +137,10 @@ socket.on("placingMarble", (spaceID) => {
         placeMarbleOnBoard(Number(quadrant), Number(row), Number(column), color)
 
         // Check if player has won
-        const winningColor = isGameOver() || ''
+        winningColor = isGameOver()
         if (winningColor === color) {
             heading.innerHTML = color.toUpperCase().concat(" WINS!")
+            newGame.disabled = false
         } else {
             space.style.pointerEvents = "none"
             isEmptySpacesActive = false
@@ -195,45 +222,43 @@ const getAdjustedCoordinates = (quadrant, row, column) => {
 }
 
 // Rotate a quad acc to arrow keys clicked by player
-socket.on("rotating", ({ rotationValue, quadIndex }) => {
-    // if (isArrowsActive) {        
-        // const quadIndex = arrows.indexOf(arrow)
-        const thisQuad = quads[quadIndex]
-        
-        degreesOfRotation[quadIndex] += rotationValue
+socket.on("rotating", ({ rotationValue, quadIndex }) => {       
+    // Rotate quad in logic board
+    const thisQuad = quads[quadIndex]    
+    degreesOfRotation[quadIndex] += rotationValue
+    rotateBoardQuadrant(quadIndex, rotationValue)
 
-        // Rotate quad in logic board
-        rotateBoardQuadrant(quadIndex, rotationValue)
+    // Rotate quad visible to players
+    thisQuad.style.transform = `rotateZ(${degreesOfRotation[quadIndex]}deg)`
+    thisQuad.style.transition = "transform 0.4s linear"
+    isArrowsActive = false
 
-        // Rotate quad visible to players
-        thisQuad.style.transform = `rotateZ(${degreesOfRotation[quadIndex]}deg)`
-        thisQuad.style.transition = "transform 0.4s linear"
-        isArrowsActive = false
-
-        // Check if any player won
-        const winningColor = isGameOver() || ''
-        if (winningColor === color) {
-            setTimeout(() => {
-                heading.innerHTML = color.toUpperCase().concat(" WINS!")
-            }, 400)
-        } else if (winningColor === nextColor) {
-            setTimeout(() => {
-                heading.innerHTML = nextColor.toUpperCase().concat(" WINS!")
-                changeBackground()
-            }, 400)
-        } else {
-            setTimeout(() => {
-                changeBackground()
-            }, 400)
-            isEmptySpacesActive = true
-        }
-
-    // }
+    // Check if any player won
+    winningColor = isGameOver()
+    if (winningColor === color) {
+        setTimeout(() => {
+            heading.innerHTML = color.toUpperCase().concat(" WINS!")
+            newGame.disabled = false
+        }, 400)
+    } else if (winningColor === nextColor) {
+        setTimeout(() => {
+            heading.innerHTML = nextColor.toUpperCase().concat(" WINS!")
+            changeBackground()
+            newGame.disabled = false
+        }, 400)
+    } else {
+        setTimeout(() => {
+            changeBackground()
+        }, 400)
+        isEmptySpacesActive = true
+    }
 })
 
 // Change background, heading and arrows
 const changeBackground = () => {
     body.style.background = nextColor
+    // backgroundOne.style.background = nextColor
+    // backgroundTwo.style.background = nextColor
     heading.style.color = color
     arrows.forEach((arrow) => {
         if (!arrow.style.filter) {
@@ -254,7 +279,6 @@ const rotateBoardQuadrant = (quadIndex, rotationValue) => {
 
     let startingRow = 0
     let startingCol = 0
-
     if (quadIndex === 1) {
         startingRow = 0
         startingCol = 3
@@ -327,13 +351,15 @@ const isGameOver = () => {
     // Check all possible winning sequences
     const array01 = [0, 1]
     const array45 = [4, 5]
-    for (let row = 0; row < 5; row++) {
-        for (let column = 0; column < 5; column++) {
+    for (let row = 0; row < 6; row++) {
+        for (let column = 0; column < 6; column++) {
             if (board[row][column] !== null) {
                 let color = board[row][column]
                 // Check rightwards horizontal line
                 if (array01.includes(column)) {
+                    console.log("l to r")
                     if (checkDirection(row, column, color, 0, 1)) {
+                        console.log('yeet')
                         return color
                     }
                 }
@@ -351,7 +377,7 @@ const isGameOver = () => {
                 }
                 // Check top-right diagonals
                 if (array01.includes(row) && array45.includes(column)) {
-                    if (checkDirection(row, column, color, -1, 1)) {
+                    if (checkDirection(row, column, color, 1, -1)) {
                         return color
                     }
                 }
@@ -364,6 +390,7 @@ const isGameOver = () => {
 const checkDirection = (row, column, color, deltaX, deltaY) => {
     let count = 0
     while (board[row][column] === color) {
+        console.log("count")
         count++
         row += deltaX
         column += deltaY
@@ -376,3 +403,48 @@ const checkDirection = (row, column, color, deltaX, deltaY) => {
     }
     return false
 }
+
+// Listen for starting a new game once current game is over
+newGame.addEventListener("click", () => {
+    socket.emit("requestNewGame")
+})
+
+socket.on("setupNewGame", () => {
+    // Get empty board
+    board = getEmptyBoard()
+    // Reset all quad rotation values
+    degreesOfRotation = [0, 0, 0, 0]
+    // Remove marbles from board
+    numOfPlacedMarbles = 0
+    // Activate/deactivate placement and rotation
+    isEmptySpacesActive = true
+    isArrowsActive = false
+
+    // Update score board
+    // Swap first/second player
+    socket.emit("newGame", winningColor)
+    
+    // Reset quad rotation
+    quads.forEach((quad) => {
+        quad.style.transform = `rotateZ(0deg)`
+        quad.style.transition = "transform 0.0s linear"
+    })
+    // Remove marbles from board
+    emptySpaces.forEach((space) => {
+        space.style.fill = "crimson"
+        space.style.pointerEvents = "auto"
+    })
+    // Update colors
+    heading.innerHTML = "Pentago!"
+    body.style.background = "white"
+    heading.style.color = "black"
+    arrows.forEach((arrow) => {
+        arrow.style.filter = ""
+    })
+    color = body.style.background || "white"
+    nextColor = body.style.background || "white"
+
+    // Disable new game button
+    newGame.disabled = true
+})
+

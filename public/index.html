@@ -2,28 +2,86 @@
 <html>
 
 <head>
-        <meta charset="UTF-8">
-        <title>Pentago</title>
-        <link rel="icon" type="image/png" href="./img/jigsaw.png">
-        <link rel="stylesheet" href="./css/pentago.css">
+    <meta charset="UTF-8">
+    <title>Pentago</title>
+    <link rel="icon" type="image/png" href="./img/jigsaw.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./css/index.css">
 </head>
 
 <body>
 
-    <div class="centered-form">
-        <div class="centered-form__box">
-            <h1>Join</h1>
-            <form action="/pentago.html">
-                <label>Display Name</label>
-                <input type="text" name="username" placeholder="Display name" required>
-                <label>Room</label>
-                <input type="text" name="room" placeholder="Room" required>
-                <button>Join</button>
-            </form>
+        <div class="container">
+            <div class="frame">
+                <div class="text rules">
+                    <h3>Rules</h3>
+                    <ul>
+                        <li>White player starts</li>
+                        <li>During your turn, place a marble in any empty space</li>
+                        <li>Rotate <i>ANY</i> quadrant by 90 degrees</li>
+                        <li>First player to get 5 in a row wins!</li>
+                    </ul> 
+                </div>
+
+                <div>
+                    <form class="form-signin" action="/pentago.html" name="form">
+                        <div id="checkbox-div">
+                        <input type="checkbox" name="gameMode" value="false" id="checkbox"/>
+                        <label for="checkbox"><span class="ui"></span>Play with friend?</label>
+                        </div>
+                        
+                        <label for="username">Username</label>
+                        <input id="username" class="form-styling" type="text" name="username" placeholder="" required disabled/>
+                        
+                        <label for="password">Room</label>
+                        <input id="room" class="form-styling" type="text" name="room" placeholder="" required disabled/>
+                        
+                        <div class="btn-animate">
+                            <button class="btn-signin">Join</button>
+                        </div>
+                    </form>  
+                </div>
+
+                <div class="text author">
+                    <h2>Made by Kush Baheti</h2>
+                    <a href="https://github.com/KushBaheti/Pentago">
+                        <img src="./img/GitHub.PNG" width="25" height="25">
+                    </a>
+                    <a href="https://www.linkedin.com/in/kush-baheti/">
+                        <img src="./img/linkedin.PNG" width="25" height="25">
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
+
+    <script type="text/javascript" src="./js/index.js"></script>
 
 </body>
 
 </html>
 
+
+
+        <!-- <div class="">
+            <h1>Join</h1>
+                <form action="/pentago.html">
+
+                    <label>Game Mode</label>
+                    
+                    <input id="offline" type="radio" name="gameMode" value="false">
+                    <label>Offline</label>
+
+                    <input id="online" type="radio" name="gameMode" value="true" checked="checked">
+                    <label>Online</label>
+
+                    <div id="online-info">
+                        <label>Display Name</label>
+                        <input id="username" type="text" name="username" placeholder="Display name" required>
+                        
+                        <label>Room</label>
+                        <input id="room" type="text" name="room" placeholder="Room" required>
+                    </div>
+
+                    <button>Join</button>
+                </form>
+        </div> -->
