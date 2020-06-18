@@ -25,8 +25,11 @@ let scoreOne = document.querySelector(".s-p1")
 let scoreTwo = document.querySelector(".s-p2")
 let playerOne = undefined
 let playerTwo = undefined
+let resetFirstTime = undefined
 socket.on("roomData", ({ room, users }) => {
     console.log(room, users)
+
+    resetFirstTime = !isOnline
 
     if (users[0].color === "white") {
         // this is player 1
@@ -461,7 +464,10 @@ socket.on("setupNewGame", () => {
     isEmptySpacesActive = true
     isArrowsActive = false
 
-    // Update score board
+    if (resetFirstTime) {
+        isFirstTime = true
+    }
+
     // Swap first/second player
     socket.emit("newGame", winningColor)
     

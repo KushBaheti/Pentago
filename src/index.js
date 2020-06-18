@@ -2,7 +2,7 @@ const path = require('path')
 const http = require('http')
 const express = require('express')
 const socketio = require('socket.io')
-const { addUser, removeUser, getUser, getUsersInRoom } = require('./utils/users')
+const { addUser, removeUser, getUser, getUsersInRoom, getLocalPlayers } = require('./utils/users')
 
 const app = express()
 
@@ -14,10 +14,6 @@ const port = process.env.PORT || 3000
 const publicDirPath = path.join(__dirname, '../public')
 
 app.use(express.static(publicDirPath))
-
-// text content
-// Cannot read property 'isOnline' of undefined - disconneced
-// UI
 
 io.on("connection", (socket) => {
     socket.on("join", ({ isOnline, username, room }, callback) => {
@@ -44,6 +40,10 @@ io.on("connection", (socket) => {
             callback()
         } else {
             socket.emit("message", "Welcome to Pentago!")
+            socket.emit("roomData", {
+                room: "local",
+                users: user.localPlayers
+            })
             socket.emit("chance", true)
         }
     })
@@ -90,6 +90,7 @@ io.on("connection", (socket) => {
         if (user.isOnline) {
             io.in(user.room).emit("setupNewGame")
         } else {
+            console.log("setUpNew emitted")
             socket.emit("setupNewGame")
         }
     })
@@ -101,17 +102,38 @@ io.on("connection", (socket) => {
             user.wins = user.color === winningColor ? user.wins + 1 : user.wins
             
             user.color = user.color === "white" ? "black" : "white"
+            
             if (user.color === "white") {
                 socket.emit("chance", true)
             } else {
                socket.emit("chance", false)
             }
 
-            io.in(user.room).emit("roomData", {
-                room: user.room,
-                users: getUsersInRoom(user.room)
-            })
+            setTimeout(() => {
+                io.in(user.room).emit("roomData", {
+                    room: user.room,
+                    users: getUsersInRoom(user.room)
+                })
+            }, 1500)
         } else {
+            if (user.localPlayers[0].color === winningColor) {
+                user.localPlayers[0].wins = user.localPlayers[0].wins + 1
+            } else {
+                user.localPlayers[1].wins = user.localPlayers[1].wins + 1
+            }
+
+            if (user.localPlayers[0].color === "white") {
+                user.localPlayers[0].color = "black"
+                user.localPlayers[1].color = "white"
+            } else {
+                user.localPlayers[0].color = "white"
+                user.localPlayers[1].color = "black"
+            }
+            
+            socket.emit("roomData", {
+                room: "local",
+                users: user.localPlayers
+            })
             socket.emit("chance", true)
         }
     })

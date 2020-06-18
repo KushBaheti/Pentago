@@ -48,9 +48,13 @@ const addUser = ({ id, isOnline, username, room }) => {
         // store user
         user = { id, isOnline, username, room, color, wins }
     } else {
-        user = { id, isOnline, wins }
+        user = { 
+            id, 
+            isOnline, 
+            localPlayers: getLocalPlayers() 
+        }
     }
-    
+
     users.push(user)
     return { user, canBegin }
 }
@@ -72,9 +76,31 @@ const getUsersInRoom = (room) => {
     return users.filter((user) => user.room === room)
 }
 
+const getLocalPlayers = () => {
+    return [
+        {
+            color: "white",
+            id: "01",
+            isOnline: false,
+            room: "local",
+            username: "batman",
+            wins: 0
+        },
+        {
+            color: "black",
+            id: "02",
+            isOnline: false,
+            room: "local",
+            username: "superman",
+            wins: 0
+        }
+    ]
+}
+
 module.exports = {
     addUser,
     removeUser,
     getUser,
-    getUsersInRoom
+    getUsersInRoom,
+    getLocalPlayers
 }
