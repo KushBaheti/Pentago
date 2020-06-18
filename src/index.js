@@ -51,8 +51,8 @@ io.on("connection", (socket) => {
     socket.on("disconnect", () => {
         const user = removeUser(socket.id)
 
-        if (user.isOnline) {
-            if (user) {
+        if (user) {
+            if (user.isOnline) {
                 io.to(user.room).emit("message", `${user.username} has left!`)
                 io.in(user.room).emit("roomData", {
                     room: user.room,

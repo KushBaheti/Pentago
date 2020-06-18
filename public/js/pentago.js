@@ -6,7 +6,6 @@ const socket = io()
 // Get new clients game mode, username, room and join
 const { gameMode = undefined, username = undefined, room = undefined } = Qs.parse(location.search, { ignoreQueryPrefix: true })
 const isOnline = gameMode === "true" ? true : false
-console.log(gameMode, username, room)
 socket.emit("join", { isOnline, username, room }, (error) => {
     if (error) {
         alert(error)
@@ -74,9 +73,14 @@ socket.on("chance", (chance) => {
     setHeading()
 })
 
-const getWinnerFromColor = (color) => {
-    winner = playerOne.color === color ? playerOne.username.toUpperCase() : playerTwo.username.toUpperCase()
-    return winner
+const getWinnerAndUpdateScoreboard = (color) => {
+    if (playerOne.color === color) {
+        scoreOne.innerHTML = parseInt(playerOne.wins) + 1
+        return playerOne.username.toUpperCase()
+    } else {
+        scoreTwo.innerHTML = parseInt(playerTwo.wins) + 1
+        return playerTwo.username.toUpperCase()
+    }
 }
 
 // Handle marble placement
@@ -173,7 +177,7 @@ socket.on("placingMarble", (spaceID) => {
         // Check if player has won
         winningColor = isGameOver()
         if (winningColor === color) {
-            let winner = getWinnerFromColor(color)
+            let winner = getWinnerAndUpdateScoreboard(color)
             heading.innerHTML = winner.concat(" WINS!")
             newGame.disabled = false
         } else {
@@ -272,14 +276,14 @@ socket.on("rotating", ({ rotationValue, quadIndex }) => {
     winningColor = isGameOver()
     if (winningColor === color) {
         setTimeout(() => {
-            let winner = getWinnerFromColor(color)
+            let winner = getWinnerAndUpdateScoreboard(color)
             heading.innerHTML = winner.concat(" WINS!")
             newGame.disabled = false
         }, 400)
     } else if (winningColor === nextColor) {
         setTimeout(() => {
             changeBackground()
-            let winner = getWinnerFromColor(nextColor)
+            let winner = getWinnerAndUpdateScoreboard(nextColor)
             heading.innerHTML = winner.concat(" WINS!")
             newGame.disabled = false
         }, 400)
@@ -426,8 +430,9 @@ const isGameOver = () => {
 const checkDirection = (row, column, color, deltaX, deltaY) => {
     let count = 0
     while (board[row][column] === color) {
-        console.log("count")
         count++
+        console.log("count")
+        console.log(board)
         row += deltaX
         column += deltaY
         if (row < 0 || row >= 6 || column < 0 || column >= 6) {
