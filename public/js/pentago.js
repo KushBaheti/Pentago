@@ -217,7 +217,7 @@ const getAdjustedCoordinates = (quadrant, row, column) => {
     let actualColumn = column
 
     // Rotate
-    if (rotation === 90) {
+    if (rotation === 90 || rotation === -270) {
         if (row === 0) actualColumn = 2
         else if (row === 1) actualColumn = 1
         else if (row === 2) actualColumn = 0
@@ -226,7 +226,7 @@ const getAdjustedCoordinates = (quadrant, row, column) => {
         else if (column === 1) actualRow = 1
         else if (column === 2) actualRow = 2
 
-    } else if (rotation === -90) {
+    } else if (rotation === -90 || rotation === 270) {
         if (column === 0) actualRow = 2
         else if (column === 1) actualRow = 1
         else if (column === 2) actualRow = 0
@@ -400,9 +400,7 @@ const isGameOver = () => {
                 let color = board[row][column]
                 // Check rightwards horizontal line
                 if (array01.includes(column)) {
-                    console.log("l to r")
                     if (checkDirection(row, column, color, 0, 1)) {
-                        console.log('yeet')
                         return color
                     }
                 }
@@ -434,8 +432,6 @@ const checkDirection = (row, column, color, deltaX, deltaY) => {
     let count = 0
     while (board[row][column] === color) {
         count++
-        console.log("count")
-        console.log(board)
         row += deltaX
         column += deltaY
         if (row < 0 || row >= 6 || column < 0 || column >= 6) {

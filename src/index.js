@@ -90,7 +90,6 @@ io.on("connection", (socket) => {
         if (user.isOnline) {
             io.in(user.room).emit("setupNewGame")
         } else {
-            console.log("setUpNew emitted")
             socket.emit("setupNewGame")
         }
     })
